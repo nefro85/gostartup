@@ -6,9 +6,13 @@ import (
 	"os"
 )
 
+func p1() {
+	fmt.Println("GO wrong++ ;)")
+}
+
 func main() {
 
-	fmt.Println("GO wrong++ ;)")
+	p1()
 	reader := bufio.NewReader(os.Stdin)
 	text, err := reader.ReadString('\n')
 	if err != nil {
