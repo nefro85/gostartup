@@ -1,12 +1,10 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"gostartup/command"
-	"io"
+	"gostartup/utils"
 	"net"
-	"strings"
 )
 
 var (
@@ -14,18 +12,7 @@ var (
 )
 
 func main() {
-
-	ln, err := net.Listen("tcp", ":8080")
-	if err != nil {
-		panic("can't listen")
-	}
-	for {
-		conn, err := ln.Accept()
-		if err != nil {
-			panic("can't accept")
-		}
-		go handleConnection(conn)
-	}
+	utils.Server(handleConnection)
 }
 
 func handleConnection(c net.Conn) {
@@ -33,7 +20,7 @@ func handleConnection(c net.Conn) {
 	fmt.Println("handling connecton " + c.RemoteAddr().String())
 
 	for {
-		processCommand(readCommand(c))
+		processCommand(utils.ReadCommand(c))
 	}
 }
 func processCommand(text string) {
@@ -44,31 +31,11 @@ func processCommand(text string) {
 
 }
 
-func genUid() (uid uint64) { // named result parameter
+func genUid() (uid uint64) {
+	// named result parameter
 	uid = cmdIds
 	cmdIds++
 	return
 }
 
-
-func readCommand(c net.Conn) string {
-	var cmdBuff bytes.Buffer
-	buff := make([]byte, 32*1024)
-	for {
-		n, err := c.Read(buff)
-		if err != nil && err != io.EOF {
-			panic(err)
-		}
-		if n == 0 {
-			break
-		}
-		s := string(buff[:n])
-
-		cmdBuff.WriteString(s)
-		if strings.Contains(s, "\r\n") {
-			break
-		}
-	}
-	return cmdBuff.String()
-}
 
