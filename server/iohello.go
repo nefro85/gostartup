@@ -2,11 +2,26 @@ package main
 
 import (
 	"bytes"
-	"net"
 	"fmt"
 	"io"
+	"net"
 	"strings"
 )
+
+func main() {
+
+	ln, err := net.Listen("tcp", ":8080")
+	if err != nil {
+		panic("can't listen")
+	}
+	for {
+		conn, err := ln.Accept()
+		if err != nil {
+			panic("can't accept")
+		}
+		go handleConnection(conn)
+	}
+}
 
 func handleConnection(c net.Conn) {
 
@@ -17,11 +32,15 @@ func handleConnection(c net.Conn) {
 	}
 }
 
-func readCommand(c net.Conn) (string) {
+func processCommand(cmd string) {
+	fmt.Print(cmd)
+}
+
+func readCommand(c net.Conn) string {
 	var cmdBuff bytes.Buffer
 	buff := make([]byte, 32*1024)
 	for {
-		n , err := c.Read(buff)
+		n, err := c.Read(buff)
 		if err != nil && err != io.EOF {
 			panic(err)
 		}
@@ -37,26 +56,3 @@ func readCommand(c net.Conn) (string) {
 	}
 	return cmdBuff.String()
 }
-
-func processCommand(cmd string) {
-	fmt.Print(cmd)
-}
-
-func main()  {
-
-	ln, err := net.Listen("tcp", ":8080")
-	if err != nil {
-		panic("can't listen")
-	}
-	for {
-		conn, err := ln.Accept()
-		if err != nil {
-			panic("can't accept")
-		}
-		go handleConnection(conn)
-	}
-}
-
-
-
-
