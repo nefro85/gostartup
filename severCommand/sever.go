@@ -13,9 +13,8 @@ var (
 )
 
 func main() {
-	ln := utils.Server(handleConnection)
+	defer quit(utils.Server(handleConnection))
 	<-done
-	quit(ln)
 }
 
 func quit(ln net.Listener) {
