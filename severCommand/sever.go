@@ -9,10 +9,22 @@ import (
 
 var (
 	cmdIds uint64 = 100
+	done          = make(chan bool, 1)
 )
 
 func main() {
-	utils.Server(handleConnection)
+	ln := utils.Server(handleConnection)
+	<-done
+	quit(ln)
+}
+
+func quit(ln net.Listener) {
+	err := ln.Close()
+
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("server ends running")
 }
 
 func handleConnection(c net.Conn) {
@@ -29,6 +41,9 @@ func processCommand(text string) {
 	cmd.Fill(genUid(), text)
 	cmd.Execute()
 
+	if cmd.IsQuit() {
+		done <- true
+	}
 }
 
 func genUid() (uid uint64) {
@@ -37,5 +52,3 @@ func genUid() (uid uint64) {
 	cmdIds++
 	return
 }
-
-

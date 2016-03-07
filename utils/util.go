@@ -1,14 +1,18 @@
 package utils
 
 import (
-	"net"
 	"bytes"
 	"io"
+	"log"
+	"net"
 	"strings"
 )
+
+const BUFFER_SIZE = 32 * 1024
+
 func ReadCommand(c net.Conn) string {
 	var cmdBuff bytes.Buffer
-	buff := make([]byte, 32 * 1024)
+	buff := make([]byte, BUFFER_SIZE)
 	for {
 		n, err := c.Read(buff)
 		if err != nil && err != io.EOF {
@@ -29,19 +33,25 @@ func ReadCommand(c net.Conn) string {
 
 type Serve func(net.Conn)
 
-func Server(hnd Serve)  {
+func Server(hnd Serve) (ln net.Listener) {
 	ln, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		panic("can't listen")
 	}
-	for {
-		conn, err := ln.Accept()
-		if err != nil {
-			panic("can't accept")
+
+	go func() {
+		for {
+			conn, err := ln.Accept()
+			if err != nil {
+				log.Print("can't accept")
+				break
+			} else {
+				go hnd(conn)
+			}
 		}
-		go hnd(conn)
-	}
+
+	}()
+
+	return
 
 }
-
-
