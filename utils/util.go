@@ -61,12 +61,11 @@ func Server(hnd Serve) (ln net.Listener) {
 }
 
 func IsPrime(n uint64) bool {
-	if n <= 1 {
+	switch {
+	case n <= 1,  n%2 == 0 || n%3 == 0:
 		return false
-	} else if n <= 3 {
+	case n <= 3:
 		return true
-	} else if n%2 == 0 || n%3 == 0 {
-		return false
 	}
 
 	var i uint64 = 5
