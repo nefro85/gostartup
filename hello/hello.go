@@ -6,17 +6,22 @@ import (
 	"os"
 )
 
-func p1() {
-	fmt.Println("GO wrong++ ;)")
+func hello() {
+	fmt.Println("Hello, I'm Go!")
 }
 
-func main() {
-
-	p1()
+func readName() (text string) {
 	reader := bufio.NewReader(os.Stdin)
 	text, err := reader.ReadString('\n')
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(text)
+	return
+}
+
+func main() {
+
+	hello()
+	name := readName()
+	fmt.Println(name)
 }

@@ -9,6 +9,7 @@ import (
 )
 
 const BUFFER_SIZE = 32 * 1024
+const LARGEST_64BIT_PRIME  = 18446744073709551557
 
 func ReadCommand(c net.Conn) string {
 	var cmdBuff bytes.Buffer
@@ -54,4 +55,25 @@ func Server(hnd Serve) (ln net.Listener) {
 
 	return
 
+}
+
+func IsPrime(n uint64) bool {
+	if n <= 1 {
+		return false
+	} else if n <= 3 {
+		return true
+	} else if n%2 == 0 || n%3 == 0 {
+		return false
+	}
+
+	var i uint64 = 5
+
+	for i*i <= n {
+		if n%i == 0 || n%(i+2) == 0 {
+			return false
+		}
+		i += 6
+	}
+
+	return true
 }
