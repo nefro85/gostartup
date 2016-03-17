@@ -80,7 +80,7 @@ func IsPrime(n uint64) bool {
 	return true
 }
 
-func GenPrime(startNumber uint64, numberOfPrimes int, output chan uint64) {
+func GenPrime(startNumber uint64, numberOfPrimes int, output chan <-uint64) {
 	var number uint64 = startNumber
 	count := 0
 	for {
