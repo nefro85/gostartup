@@ -1,42 +1,65 @@
 package main
 
 import (
-	"fmt"
-	"time"
+	console "fmt"
 	"gostartup/utils"
+	"os"
+	"strconv"
+	"time"
 )
 
 func main() {
-	ch1 := make(chan string, 1)
-	quit := make(chan bool, 1)
 
-	go asyncTaskTimeouter(quit, ch1)
+	application()
+
+	console.Println("exit")
+	os.Exit(0)
+}
+
+func application() {
+	ch1 := make(chan string, 1)
+	quit := make(chan bool)
+
+	defer func() {
+		console.Println("clean up!")
+		close(ch1)
+		close(quit)
+	}()
+
+	go asyncTask(quit, ch1)
 
 	select {
 	case data := <-ch1:
-		fmt.Println(data)
+		console.Println(data)
 		break
-	case <-time.After(time.Second * 2):
-		fmt.Println("timeout")
-		quit <- true
-
-		close(ch1)
+	case <-time.After(time.Second * 10):
+		console.Println("timeout")
 	}
-
-	fmt.Println("end begin")
-	time.Sleep(time.Second * 7)
-	fmt.Println("the end")
 }
 
-func asyncTaskTimeouter(quit chan bool, out chan string) {
+func asyncTask(quit chan bool, out chan string) {
+	primeResult := make(chan bool)
+
+	go func() {
+		primeFmt := func(base int) string {
+			return strconv.FormatUint(utils.BIG_PRIME, base)
+		}
+
+		console.Printf("async: checking is %s (dec:%s) is a prime number...\n", primeFmt(16), primeFmt(10))
+		isPrime := utils.IsPrime(utils.BIG_PRIME)
+
+		out <- "async: taskdone, is prime: " + strconv.FormatBool(isPrime)
+		primeResult <- isPrime
+	}()
 
 	select {
 	case <-quit:
-		fmt.Println("goQuit")
+		console.Println("async: quit async task")
 		return
-	default:
-		utils.IsPrime(utils.LARGEST_64BIT_PRIME)
-
-		out <- "taskdone"
+	case <-time.After(time.Second * 3):
+		console.Println("async: quit timeout")
+		return
+	case <-primeResult:
+		return
 	}
 }

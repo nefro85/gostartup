@@ -8,8 +8,11 @@ import (
 	"strings"
 )
 
-const BUFFER_SIZE = 32 * 1024
-const LARGEST_64BIT_PRIME  = 18446744073709551557
+const (
+	BUFFER_SIZE          = 32 * 1024
+	BIG_PRIME     uint64 = 18446744073709551557
+	STRESS_PRIMES uint64 = 72057594037931771
+)
 
 func ReadCommand(c net.Conn) string {
 	var cmdBuff bytes.Buffer
@@ -76,4 +79,21 @@ func IsPrime(n uint64) bool {
 	}
 
 	return true
+}
+
+func GenPrime(startNumber uint64, numberOfPrimes int, output chan uint64) {
+	var number uint64 = startNumber
+	count := 0
+	for {
+		if IsPrime(number) {
+			output <- number
+			count += 1
+		}
+		number++
+
+		if count >= numberOfPrimes {
+			break
+		}
+	}
+
 }

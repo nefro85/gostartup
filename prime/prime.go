@@ -1,19 +1,25 @@
 package main
 
 import (
-	"gostartup/utils"
 	"fmt"
+	pn "gostartup/utils"
 )
 
-func main()  {
-	count := 0;
-	var number uint64 = 0;
+func main() {
+	//trivial()
+	simple()
+
+}
+
+func trivial() {
+	count := 0
+	var number uint64 = 0
 
 	for {
-		if utils.IsPrime(number) {
-			fmt.Printf("Prime#%d: %d\n", count + 1, number)
+		if pn.IsPrime(number) {
+			fmt.Printf("Prime#%d: %d\n", count+1, number)
 
-			count+= 1
+			count += 1
 		}
 		number++
 
@@ -23,5 +29,18 @@ func main()  {
 	}
 }
 
+func simple() {
 
+	channel := make(chan uint64)
 
+	go func() {
+		from := pn.STRESS_PRIMES
+		quantity := 10
+		pn.GenPrime(from, quantity, channel)
+		close(channel)
+	}()
+
+	for prime := range channel {
+		fmt.Println(prime)
+	}
+}
