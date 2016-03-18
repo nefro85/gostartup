@@ -7,7 +7,7 @@ import (
 
 func main() {
 	//trivial()
-	simple()
+	byChannel()
 
 }
 
@@ -29,7 +29,7 @@ func trivial() {
 	}
 }
 
-func simple() {
+func byChannel() {
 
 	channel := make(chan uint64)
 

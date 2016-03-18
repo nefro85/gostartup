@@ -12,19 +12,20 @@ func main() {
 
 	application()
 
+	time.Sleep(time.Second * 10)
 	console.Println("exit")
 	os.Exit(0)
 }
 
 func application() {
 	ch1 := make(chan string, 1)
-	quit := make(chan bool)
+	quit := make(chan bool, 1)
 
-	defer func() {
-		console.Println("clean up!")
-		close(ch1)
-		close(quit)
-	}()
+	//defer func() {
+	//	console.Println("clean up!")
+	//	close(ch1)
+	//	close(quit)
+	//}()
 
 	go asyncTask(quit, ch1)
 
@@ -32,15 +33,17 @@ func application() {
 	case data := <-ch1:
 		console.Println(data)
 		break
-	case <-time.After(time.Second * 10):
+	case <-time.After(time.Second * 5):
 		console.Println("timeout")
+		quit <- true
+		close(quit)
+		close(ch1)
 	}
 }
 
 func asyncTask(quit chan bool, out chan string) {
-	primeResult := make(chan bool)
 
-	go func() {
+	check := func() {
 		primeFmt := func(base int) string {
 			return strconv.FormatUint(utils.BIG_PRIME, base)
 		}
@@ -49,17 +52,17 @@ func asyncTask(quit chan bool, out chan string) {
 		isPrime := utils.IsPrime(utils.BIG_PRIME)
 
 		out <- "async: taskdone, is prime: " + strconv.FormatBool(isPrime)
-		primeResult <- isPrime
-	}()
+		//primeResult <- isPrime
+	}
 
 	select {
 	case <-quit:
 		console.Println("async: quit async task")
 		return
-	case <-time.After(time.Second * 3):
-		console.Println("async: quit timeout")
-		return
-	case <-primeResult:
-		return
+	//case <-time.After(time.Second * 3):
+	//	console.Println("async: quit timeout")
+	//	return
+	default:
+		check()
 	}
 }

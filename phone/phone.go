@@ -1,11 +1,14 @@
 package phone
 
-const (
-	_ = iota
-	NEXUS_UID = iota
-	IPHONE_UID = iota
+import (
+	"fmt"
 )
 
+const (
+	_          = iota
+	NEXUS_UID  = iota
+	IPHONE_UID = iota
+)
 
 type Sms string
 type PhoneNumber []int
@@ -18,36 +21,30 @@ type Phone interface {
 
 type Hardware struct {
 	System Os
-	Imei int
+	Imei   int
 }
-
-
 
 type Nexus struct {
-	Hardware
+	Hw Hardware
 }
 
-
-func (ip Nexus) Call(voice PhoneNumber) {
-
-}
-
-func (ip Nexus)Text(sms Sms)  {
+func (nex *Nexus) Call(number PhoneNumber) {
+	fmt.Printf("%#v Call : %v \n" ,nex, number)
 
 }
 
+func (nex *Nexus) Text(sms Sms) {
+
+}
 
 type Iphone struct {
-	Hardware
+	Hw Hardware
 }
 
-func (ip Iphone) Call(voice PhoneNumber) {
-
+func (ip *Iphone) Call(number PhoneNumber) {
+	fmt.Printf("%#v Call : %v \n" ,ip, number)
 }
 
-func (ip Iphone)Text(sms Sms)  {
+func (ip *Iphone) Text(sms Sms) {
 
 }
-
-
-

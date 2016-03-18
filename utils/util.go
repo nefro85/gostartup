@@ -62,7 +62,7 @@ func Server(hnd Serve) (ln net.Listener) {
 
 func IsPrime(n uint64) bool {
 	switch {
-	case n <= 1,  n%2 == 0 || n%3 == 0:
+	case n <= 1, n%2 == 0 || n%3 == 0:
 		return false
 	case n <= 3:
 		return true
@@ -80,7 +80,7 @@ func IsPrime(n uint64) bool {
 	return true
 }
 
-func GenPrime(startNumber uint64, numberOfPrimes int, output chan <-uint64) {
+func GenPrime(startNumber uint64, numberOfPrimes int, output chan<- uint64) {
 	var number uint64 = startNumber
 	count := 0
 	for {
