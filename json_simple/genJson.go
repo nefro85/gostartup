@@ -37,6 +37,14 @@ func main() {
 	console("CiReport struct:")
 	console(report)
 
+	jsonData := CiReport{
+		Date: "2016-03-21 09:00",
+		Jobs: []JobStatus{JobStatus{"Job X", "pass"}, JobStatus{"Job Y", "in progress"}},
+	}
+
+	byteData, _ := json.Marshal(jsonData)
+	console(string(byteData))
+
 }
 
 func checkErr(e error) {
