@@ -4,16 +4,19 @@ import (
 	"net/http"
 	"io"
 	"fmt"
+	"time"
 )
 
 func main() {
 
 	http.HandleFunc("/hello", hndHello)
-	http.ListenAndServe(":8080", nil)
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		panic(err)
+	}
 }
 
 func hndHello(w http.ResponseWriter, req *http.Request) {
-	io.WriteString(w, "hello world" )
+	io.WriteString(w, "hello world @" + time.Now().String())
 
 	fmt.Println(req)
 }
