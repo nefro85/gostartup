@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"io"
+	"fmt"
 )
 
 func main() {
@@ -12,5 +13,7 @@ func main() {
 }
 
 func hndHello(w http.ResponseWriter, req *http.Request) {
-	io.WriteString(w, "hello world")
+	io.WriteString(w, "hello world" )
+
+	fmt.Println(req)
 }
