@@ -1,10 +1,10 @@
 package main
 
 import (
-	"io/ioutil"
-	"fmt"
-	"os"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
 )
 
 type JobStatus struct {
@@ -17,10 +17,9 @@ type CiReport struct {
 	Jobs []JobStatus `json:"jobs"`
 }
 
-func main()  {
-	console := fmt.Println;
+func main() {
+	console := fmt.Println
 	data := readJson()
-
 
 	var storage map[string]interface{}
 	var report CiReport
@@ -35,15 +34,14 @@ func main()  {
 	console("Map values:")
 	console(storage)
 
-
 	console("CiReport struct:")
 	console(report)
 
 }
 
-func checkErr(e error)  {
+func checkErr(e error) {
 	if e != nil {
-		panic (e)
+		panic(e)
 	}
 }
 
@@ -52,18 +50,7 @@ func readJson() []byte {
 	path := os.Getenv("GOPATH")
 	path = path + "/src/gostartup/json_simple/"
 
-	data , err := ioutil.ReadFile(path + "jobsStatus.json")
+	data, err := ioutil.ReadFile(path + "jobsStatus.json")
 	checkErr(err)
 	return data
 }
-
-
-
-
-
-
-
-
-
-
-
