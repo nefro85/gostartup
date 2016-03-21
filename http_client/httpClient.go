@@ -25,7 +25,7 @@ func main() {
 
 	urls := make([]UrlReq, BUFF)
 	for i := 0; i < BUFF; i++ {
-		urls[i] = UrlReq{"http://localhost:8080/hello?uid=" + strconv.Itoa(i), ""}
+		urls[i] = UrlReq{"http://localhost:8080/hello?uid=" + strconv.Itoa(i + 1), ""}
 		//log.Println(urls[i])
 	}
 
@@ -37,23 +37,21 @@ func main() {
 	for out := range responses {
 		fmt.Println(out)
 	}
-
 }
 
 func performHttpRequest(requests <-chan UrlReq, output chan<- UrlReq) {
 	for r := range requests {
 		go func(item UrlReq) {
 			resp, _ := http.Get(item.Url)
-			size := resp.ContentLength
 			data, err := ioutil.ReadAll(resp.Body)
 
 			if err != nil {
 				log.Fatal(err)
+			} else {
+
+				item.Response = string(data[:len(data)])
+				output <- item
 			}
-
-			item.Response = string(data[:size])
-
-			output <- item
 		}(r)
 	}
 }
