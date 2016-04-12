@@ -29,7 +29,7 @@ func ReadCommand(c net.Conn) string {
 
 		cmdBuff.WriteString(s)
 		if strings.Contains(s, "\r\n") {
-			break
+			break //optimistic case
 		}
 	}
 	return cmdBuff.String()

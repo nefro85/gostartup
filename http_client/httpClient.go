@@ -15,7 +15,7 @@ type UrlReq struct {
 }
 
 const (
-	BUFF = 10
+	BUFF = 100
 )
 
 func main() {
