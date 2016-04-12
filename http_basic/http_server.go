@@ -1,9 +1,9 @@
 package main
 
 import (
-	"net/http"
-	"io"
 	"fmt"
+	"io"
+	"net/http"
 	"time"
 )
 
@@ -16,7 +16,7 @@ func main() {
 }
 
 func hndHello(w http.ResponseWriter, req *http.Request) {
-	io.WriteString(w, "hello world @" + time.Now().String())
+	io.WriteString(w, "hello world @"+time.Now().String())
 
 	fmt.Println(req)
 }

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"time"
 	"fmt"
+	"time"
 )
 
 func main() {
@@ -10,20 +10,16 @@ func main() {
 	input := make(chan string, 2)
 	go receive(input)
 
-
 	fmt.Println("waiting for data...")
-	for data := range input{
+	for data := range input {
 		fmt.Println(data)
 	}
 
-
 	fmt.Println("exit")
-
 
 }
 
-func receive(data chan <- string)  {
-
+func receive(data chan<- string) {
 
 	time.Sleep(time.Second * 5)
 

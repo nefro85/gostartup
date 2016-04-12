@@ -1,18 +1,17 @@
 package main
 
 import (
-	"net/http"
-	"io"
-	"time"
 	"fmt"
+	"io"
+	"net/http"
+	"time"
 )
 
 type httpHandler struct {
-
 }
 
 func (c *httpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "hello world @" + time.Now().String())
+	io.WriteString(w, "hello world @"+time.Now().String())
 
 	fmt.Println(r)
 }
@@ -25,5 +24,3 @@ func main() {
 	http.ListenAndServe(":8080", nil)
 
 }
-
-

@@ -29,7 +29,7 @@ type Nexus struct {
 }
 
 func (nex *Nexus) Call(number PhoneNumber) {
-	fmt.Printf("%#v Call : %v \n" ,nex, number)
+	fmt.Printf("%#v Call : %v \n", nex, number)
 
 }
 
@@ -42,7 +42,7 @@ type Iphone struct {
 }
 
 func (ip *Iphone) Call(number PhoneNumber) {
-	fmt.Printf("%#v Call : %v \n" ,ip, number)
+	fmt.Printf("%#v Call : %v \n", ip, number)
 }
 
 func (ip *Iphone) Text(sms Sms) {
